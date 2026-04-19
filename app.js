@@ -79,13 +79,36 @@ class BoxingTimer {
         });
         
         document.getElementById('close-settings-btn').addEventListener('click', () => {
+            this.saveSettingsFromUI();
             this.settingsScreen.classList.add('hidden');
+            this.resetTimer();
         });
 
         document.getElementById('save-settings-btn').addEventListener('click', () => {
             this.saveSettingsFromUI();
             this.settingsScreen.classList.add('hidden');
             this.resetTimer();
+        });
+
+        // Auto-save on input changes
+        const settingsInputs = this.settingsScreen.querySelectorAll('input');
+        settingsInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                if (input.type !== 'file') {
+                    this.saveSettingsFromUI();
+                    this.resetTimer();
+                }
+            });
+        });
+
+        // Auto-save when app is backgrounded/closed
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') {
+                if (!this.settingsScreen.classList.contains('hidden')) {
+                    this.saveSettingsFromUI();
+                }
+                this.saveConfig();
+            }
         });
 
         // Audio Tests
@@ -147,18 +170,20 @@ class BoxingTimer {
     }
 
     saveSettingsFromUI() {
-        const getVal = id => parseInt(document.getElementById(id).value) || 0;
+        const getVal = (id, min = 0) => Math.max(min, parseInt(document.getElementById(id).value) || min);
         
         this.config = {
-            rounds: getVal('setting-rounds'),
+            rounds: getVal('setting-rounds', 1),
             roundTime: getVal('setting-round-m') * 60 + getVal('setting-round-s'),
             breakTime: getVal('setting-break-m') * 60 + getVal('setting-break-s'),
             warnRound: getVal('setting-warn-round'),
             warnBreak: getVal('setting-warn-break'),
             beepEnabled: document.getElementById('setting-beep-enable').checked,
-            beepMin: getVal('setting-beep-min'),
-            beepMax: getVal('setting-beep-max')
+            beepMin: getVal('setting-beep-min', 1),
+            beepMax: getVal('setting-beep-max', 2)
         };
+        
+        if (this.config.roundTime < 1) this.config.roundTime = 1;
         
         this.saveConfig();
     }
