@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Boxing Timer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#121212">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
+</head>
+<body class="theme-idle">
+    <div id="app" class="screen main-screen">
+        <header>
+            <div class="round-info" id="round-info">Round 1 / 3</div>
+            <button id="settings-btn" class="icon-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </button>
+        </header>
+
+        <main class="timer-container">
+            <div class="timer-wrapper">
+                <svg class="progress-ring" viewBox="0 0 100 100">
+                    <circle class="progress-ring__background" cx="50" cy="50" r="45"></circle>
+                    <circle class="progress-ring__circle" id="progress-circle" cx="50" cy="50" r="45"></circle>
+                </svg>
+                <div class="timer-content">
+                    <div class="status-label" id="status-label">IDLE</div>
+                    <div class="timer-display" id="timer-display">03:00</div>
+                </div>
+            </div>
+        </main>
+
+        <div class="controls">
+            <button id="reset-btn" class="control-btn secondary">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+            </button>
+            <button id="play-pause-btn" class="control-btn primary">
+                <svg id="icon-play" width="32" height="32" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                <svg id="icon-pause" width="32" height="32" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+            </button>
+            <button id="skip-btn" class="control-btn secondary">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="settings" class="screen settings-screen hidden">
+        <header>
+            <h2>Settings</h2>
+            <button id="close-settings-btn" class="icon-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </header>
+        <div class="settings-content">
+            <section class="settings-card">
+                <h3>Rounds & Times</h3>
+                <div class="setting-row">
+                    <label>Number of Rounds</label>
+                    <input type="number" id="setting-rounds" value="3" min="1" max="50">
+                </div>
+                <div class="setting-row">
+                    <label>Round Time</label>
+                    <div class="time-input">
+                        <input type="number" id="setting-round-m" value="3" min="0" max="59"><span>m</span>
+                        <input type="number" id="setting-round-s" value="0" min="0" max="59"><span>s</span>
+                    </div>
+                </div>
+                <div class="setting-row">
+                    <label>Break Time</label>
+                    <div class="time-input">
+                        <input type="number" id="setting-break-m" value="1" min="0" max="59"><span>m</span>
+                        <input type="number" id="setting-break-s" value="0" min="0" max="59"><span>s</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="settings-card">
+                <h3>Warnings</h3>
+                <div class="setting-row">
+                    <label>Round Warning</label>
+                    <div class="time-input">
+                        <input type="number" id="setting-warn-round" value="30" min="0" max="300"><span>s</span>
+                    </div>
+                </div>
+                <div class="setting-row">
+                    <label>Break Warning</label>
+                    <div class="time-input">
+                        <input type="number" id="setting-warn-break" value="10" min="0" max="60"><span>s</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="settings-card">
+                <h3>Random Beep Trainer</h3>
+                <div class="setting-row">
+                    <label for="setting-beep-enable">Enable during Round</label>
+                    <label class="switch">
+                        <input type="checkbox" id="setting-beep-enable">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="setting-row" id="beep-min-row" style="opacity: 0.5; pointer-events: none;">
+                    <label>Min Interval</label>
+                    <div class="time-input">
+                        <input type="number" id="setting-beep-min" value="3" min="1" max="60"><span>s</span>
+                    </div>
+                </div>
+                <div class="setting-row" id="beep-max-row" style="opacity: 0.5; pointer-events: none;">
+                    <label>Max Interval</label>
+                    <div class="time-input">
+                        <input type="number" id="setting-beep-max" value="10" min="2" max="120"><span>s</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="settings-card">
+                <h3>Custom Audio (Optional)</h3>
+                <p class="small-text">Upload your own sounds or leave empty for defaults.</p>
+                
+                <div class="audio-input-group">
+                    <label>Start/End Bell</label>
+                    <div class="audio-controls">
+                        <input type="file" id="audio-bell" accept="audio/*">
+                        <button class="test-audio-btn" id="test-bell-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="audio-input-group">
+                    <label>Warning Signal</label>
+                    <div class="audio-controls">
+                        <input type="file" id="audio-warning" accept="audio/*">
+                        <button class="test-audio-btn" id="test-warning-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="audio-input-group">
+                    <label>Trainer Beep</label>
+                    <div class="audio-controls">
+                        <input type="file" id="audio-beep" accept="audio/*">
+                        <button class="test-audio-btn" id="test-beep-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <button id="clear-audio-btn" class="secondary-btn full-width">Reset to Default Sounds</button>
+            </section>
+            
+            <div class="settings-footer">
+                <button id="save-settings-btn" class="primary-btn full-width">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="audio.js"></script>
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then(reg => {
+                    console.log('ServiceWorker registered with scope:', reg.scope);
+                }).catch(err => {
+                    console.error('ServiceWorker registration failed:', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
